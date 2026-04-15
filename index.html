@@ -76,18 +76,17 @@
         }
 
 .deck-info {                   
-    margin: 15px auto 8px auto;       
-    font-weight: bold;
-    color: var(--forstgrun);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255,255,255,0.6);
-    padding: 6px 12px;
-    border-radius: 6px;
-    box-sizing: border-box;         /* Verhindert, dass Padding die Breite sprengt */
+margin: 5px auto 8px auto;
+  font-weight: bold;
+  color: #fff;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
         .score-badge {
@@ -95,13 +94,12 @@
             color: white;
             padding: 2px 10px;
             border-radius: 12px;
-            font-size: 0.9rem;
             min-width: 20px;
             text-align: center;
         }
 
         .score-badge.pop { transform: scale(1.4); }
-        #player-side .score-badge { background: var(--sommergrun); }
+        #player-side .score-badge { background: var(--forstgrun); }
 
         .card {
             background-color: var(--karten-bg);
@@ -120,12 +118,15 @@
         }
 
         .card.cpu-hidden::after {
-            content: attr(data-opponent);
-            color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border: 1px solid white;
-            padding: 4px 12px;
+content: attr(data-opponent); /* Liest den Text inklusive Zahl aus dem HTML-Attribut */
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 1px solid white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-align: center;
+    background: rgba(0,0,0,0.2);
         }
 
         .header {
@@ -178,7 +179,7 @@
             stroke-width: 2.5;
         }
 
-        .bar-container { background: #eee; height: 5px; border-radius: 2px; margin: 3px 0; }
+        .bar-container { background: #eee; height: 4px; border-radius: 2px; margin: 3px 0; }
         .bar-fill { height: 100%; background-color: var(--fruhlingsgrun); }
         .humor-text { font-size: 11px; font-style: italic; color: #666; }
 
@@ -227,10 +228,6 @@
 
 <div class="game-board" id="game-board">
     <div id="cpu-side">
-        <div class="deck-info">
-            <span>Gegners Karten: <span id="opponent-name">--</span></span> 
-            <span class="score-badge" id="c-count">--</span>
-        </div>
         <div id="cpu-card-container"></div>
     </div>
 
@@ -258,7 +255,7 @@
     };
 
     const mitarbeiterDaten = [
-    { titel: "Forstwirte", bildUrl: "forstwirt.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:98, t:"Regen ist flüssiger Sonnenschein"}, {l:"BÜROKRATIE-LEVEL", v:14, t:"Nur das Nötigste"}, {l:"TECHNIK-AFFINITÄT", v:64, t:"Motorsägenchirurg"}, {l:"KALORIENVERBRAUCH", v:96, t:"Mischung aus Schwarzenegger & Usain Bolt"}, {l:"PUBLIKUMSVERKEHR", v:19, t:"Meist nur Pilzsammler"}], special: "Kettenwechsel im Blindflug" },
+         { titel: "Forstwirte", bildUrl: "forstwirt.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:98, t:"Regen ist flüssiger Sonnenschein"}, {l:"BÜROKRATIE-LEVEL", v:14, t:"Nur das Nötigste"}, {l:"TECHNIK-AFFINITÄT", v:64, t:"Motorsägenchirurg"}, {l:"KALORIENVERBRAUCH", v:96, t:"Mischung aus Schwarzenegger & Usain Bolt"}, {l:"PUBLIKUMSVERKEHR", v:19, t:"Meist nur Pilzsammler"}], special: "Kettenwechsel im Blindflug" },
     { titel: "Forstamtsleitung", bildUrl: "leiter.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:26, t:"Dienstfahrt zu Beratungen"}, {l:"BÜROKRATIE-LEVEL", v:94, t:"Unterschriften-Marathon"}, {l:"TECHNIK-AFFINITÄT", v:49, t:"Hofft auf Videokonferenz ohne Echo"}, {l:"KALORIENVERBRAUCH", v:39, t:"Tennisarm vom Telefonieren"}, {l:"PUBLIKUMSVERKEHR", v:89, t:"Krisenmanagement & Grußworte"}], special: "Diplomatisches Schweigen" },
     { titel: "Revierleitung", bildUrl: "foerster.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:87, t:"Revierrunden"}, {l:"BÜROKRATIE-LEVEL", v:61, t:"Wer schreibt, der bleibt"}, {l:"TECHNIK-AFFINITÄT", v:76, t:"Reviertablet-Profi"}, {l:"KALORIENVERBRAUCH", v:74, t:"Kilometerfresser im Revier"}, {l:"PUBLIKUMSVERKEHR", v:81, t:"Brennholzkunden bespaßen"}], special: "Baumschätzung auf 2 cm genau" },
     { titel: "Sachbearbeitung", bildUrl: "sachbearbeiter.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:11, t:"Betriebsausflug & Sommerfest"}, {l:"BÜROKRATIE-LEVEL", v:99, t:"Kennt jede Richtlinie"}, {l:"TECHNIK-AFFINITÄT", v:71, t:"Zehnfingersystem-Akrobat"}, {l:"KALORIENVERBRAUCH", v:29, t:"Nervennahrung: Keksdose"}, {l:"PUBLIKUMSVERKEHR", v:62, t:"Telefon-Dauerschleife"}], special: "Aktenzeichen-Gedächtnis" },
@@ -318,8 +315,9 @@
     { titel: "Aus-, Fort- und Weiterbildung", bildUrl: "bildung.jpg", stats: [{l: "OUTDOOR-ANTEIL", v: 43, t: "Zwischen Auswahlgesprächen und Ausbildungsmessen"}, {l: "BÜROKRATIE-LEVEL", v: 84, t: "Bewerbungsstapel"}, {l: "TECHNIK-AFFINITÄT", v: 77, t: "E-Learning & VR-Simulatoren"}, {l: "KALORIENVERBRAUCH", v: 48, t: "Moderationskoffer schleppen"}, {l: "PUBLIKUMSVERKEHR", v: 96, t: "Dauer-Networking mit Dozenten"}], special: "Wissen ist die beste Schutzausrüstung" }
 ];
 
-    const gegnerListe = ["DER HOLZDIEB", "DER BORKENKÄFER", "DER WANDERER", "DER MÜLLSÜNDER", "DER RADFAHRER", "JOGGER", "BRENNHOLZWERBER", "Jagdpächter"];
-    let playerDeck = [], cpuDeck = [], canPlay = true, aktuellerGegner = "";
+    let playerDeck = [];
+    let cpuDeck = [];
+    let canPlay = true;
 
     function startGame() {
         document.getElementById('start-screen').style.display = 'none';
@@ -333,19 +331,17 @@
         cards.sort(() => Math.random() - 0.5);
         playerDeck = cards.slice(0, Math.floor(cards.length / 2));
         cpuDeck = cards.slice(Math.floor(cards.length / 2));
-        
-
-        neuerGegner(); 
         render();
     }
 
-    function neuerGegner() {
-        aktuellerGegner = gegnerListe[Math.floor(Math.random() * gegnerListe.length)];
-    }
-
     function createCardHTML(data, isCpuHidden, filterIndex = null) {
-        if (isCpuHidden) return `<div class="card cpu-hidden" data-opponent="${aktuellerGegner}"></div>`;
-        if (!data) return '';
+        // Wenn es die verdeckte Gegnerkarte ist:
+    if (isCpuHidden) {
+        const count = cpuDeck.length; // Holt die aktuelle Anzahl
+        return `<div class="card cpu-hidden" data-opponent="Gegner hat: ${count} Karten"></div>`;
+    }
+    
+    if (!data) return '';
 
         const renderStat = (s, i, isMini) => {
             const iconName = iconMap[s.l] || "circle";
@@ -430,31 +426,40 @@
         canPlay = true;
         document.getElementById('next-btn').style.display = "none";
         document.getElementById('message').textContent = "Wähle einen Wert...";
-        
-        // HIER WAR DER FEHLER: neuerGegner() wurde entfernt.
-        
         render();
     }
 
-    function updateCounts() {
-        const pBadge = document.getElementById('p-count');
-        const cBadge = document.getElementById('c-count');
-        pBadge.classList.add('pop');
+function updateCounts() {
+    const pBadge = document.getElementById('p-count');
+    pBadge.classList.add('pop');
+    pBadge.textContent = playerDeck.length;
+    
+    // cBadge nur updaten, wenn es existiert
+    const cBadge = document.getElementById('c-count');
+    if(cBadge) {
         cBadge.classList.add('pop');
-        pBadge.textContent = playerDeck.length;
         cBadge.textContent = cpuDeck.length;
-        setTimeout(() => { pBadge.classList.remove('pop'); cBadge.classList.remove('pop'); }, 200);
     }
+    
+    setTimeout(() => { 
+        pBadge.classList.remove('pop'); 
+        if(cBadge) cBadge.classList.remove('pop');
+    }, 200);
+}
 
-    function render() {
-        // Name im Header aktualisieren
-        document.getElementById('opponent-name').textContent = aktuellerGegner;
-        
-        document.getElementById('player-card-container').innerHTML = createCardHTML(playerDeck[0], false);
-        document.getElementById('cpu-card-container').innerHTML = createCardHTML(null, true);
-        lucide.createIcons();
-        updateCounts();
-    }
+function render() {
+    // Spieler-Karte rendern
+    document.getElementById('player-card-container').innerHTML = createCardHTML(playerDeck[0], false);
+    
+    // CPU-Karte rendern (die Funktion createCardHTML zieht sich die Zahl jetzt selbst)
+    document.getElementById('cpu-card-container').innerHTML = createCardHTML(null, true);
+    
+    // Nur noch die Anzahl DEINER Karten aktualisieren
+    document.getElementById('p-count').innerText = playerDeck.length;
+
+    // Icons neu laden
+    lucide.createIcons();
+}
 </script>
 </body>
 </html>
