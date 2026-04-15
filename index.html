@@ -241,7 +241,7 @@ content: attr(data-opponent); /* Liest den Text inklusive Zahl aus dem HTML-Attr
 </div>
 
 <div class="controls" id="game-controls">
-    <div id="message">Wähle einen Wert!</div>
+    <div id="message">↑ Wähle einen Wert ↑</div>
     <button id="next-btn" class="game-button" style="display:none;" onclick="nextRound()">Nächste Runde</button>
 </div>
 
@@ -397,7 +397,7 @@ content: attr(data-opponent); /* Liest den Text inklusive Zahl aus dem HTML-Attr
         const msgEl = document.getElementById('message');
 
         if (pVal > cVal) {
-            msgEl.textContent = "Rundensieg!";
+            msgEl.textContent = "Stich gewonnen!";
             pRows[statIndex].classList.add('winner');
             if(cRows[0]) cRows[0].classList.add('loser');
             playerDeck.push(playerDeck.shift(), cpuDeck.shift());
@@ -425,7 +425,7 @@ content: attr(data-opponent); /* Liest den Text inklusive Zahl aus dem HTML-Attr
         }
         canPlay = true;
         document.getElementById('next-btn').style.display = "none";
-        document.getElementById('message').textContent = "Wähle einen Wert...";
+        document.getElementById('message').textContent = "↑ Wähle einen Wert ↑";
         render();
     }
 
