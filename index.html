@@ -11,7 +11,7 @@
             --sommergrun: #3e822c;
             --fruhlingsgrun: #91ae2d;
             --schwarz: #2d2a26;
-            --hintergrund: #f0f2f0;
+            --hintergrund: #87b4c3;
             --karten-bg: #f9faf8;
             --akzent: #d4a017;
             --sieg: #28a745;
@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: var(--hintergrund);
+            background-image: linear-gradient(#3e822c 22%, #154734 80%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,20 +75,20 @@
             margin-top: 5px;
         }
 
-        .deck-info {
-            font-weight: bold;
-            color: var(--forstgrun);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-			margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.5);
-            padding: 4px 8px;
-            border-radius: 20px;
-        }
+.deck-info {                   
+    margin: 15px auto 8px auto;       
+    font-weight: bold;
+    color: var(--forstgrun);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.6);
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-sizing: border-box;         /* Verhindert, dass Padding die Breite sprengt */
+}
 
         .score-badge {
             background: var(--forstgrun);
@@ -112,7 +112,7 @@
 
         .card.cpu-hidden {
             background: repeating-linear-gradient(45deg, var(--forstgrun), var(--forstgrun) 10px, #1a5a42 10px, #1a5a42 20px);
-            height: 60px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -178,7 +178,7 @@
             stroke-width: 2.5;
         }
 
-        .bar-container { background: #eee; height: 3px; border-radius: 2px; margin: 3px 0; }
+        .bar-container { background: #eee; height: 5px; border-radius: 2px; margin: 3px 0; }
         .bar-fill { height: 100%; background-color: var(--fruhlingsgrun); }
         .humor-text { font-size: 11px; font-style: italic; color: #666; }
 
@@ -198,8 +198,15 @@
             font-weight: bold;
             font-size: 16px;
         }
-
-        #message { font-size: 14px; font-weight: bold; color: var(--forstgrun); margin-bottom: 8px; }
+#next-btn {
+    width: 50%;            /* Breite auf die Hälfte reduziert */
+    max-width: 200px;      /* Verhindert, dass er auf Desktop zu groß wird */
+    padding: 10px;         /* Etwas schmaler in der Höhe */
+    font-size: 14px;       /* Schriftgröße leicht angepasst */
+    margin: 15px auto;     /* Zentriert den Button horizontal */
+    display: none;         /* Bleibt standardmäßig ausgeblendet */
+}
+        #message { font-size: 14px; font-weight: bold; color:#fff; margin-bottom: 8px; }
 
         .portrait-mini { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--sommergrun); overflow: hidden; margin-right: 8px; }
         .portrait-mini img { width: 100%; height: 100%; object-fit: cover; }
@@ -221,7 +228,7 @@
 <div class="game-board" id="game-board">
     <div id="cpu-side">
         <div class="deck-info">
-            <span>Gegner: <span id="opponent-name">--</span></span> 
+            <span>Gegners Karten: <span id="opponent-name">--</span></span> 
             <span class="score-badge" id="c-count">--</span>
         </div>
         <div id="cpu-card-container"></div>
@@ -229,7 +236,7 @@
 
     <div id="player-side">
         <div class="deck-info">
-            <span>Dein Revier</span> 
+            <span>Deine Karten:</span> 
             <span class="score-badge" id="p-count">--</span>
         </div>
         <div id="player-card-container"></div>
@@ -242,7 +249,6 @@
 </div>
 
 <script>
-    // Konfiguration der Icons passend zu den Labels
     const iconMap = {
         "OUTDOOR-ANTEIL": "tree-pine",
         "BÜROKRATIE-LEVEL": "file-text",
@@ -251,7 +257,7 @@
         "PUBLIKUMSVERKEHR": "users"
     };
 
-const mitarbeiterDaten = [
+    const mitarbeiterDaten = [
     { titel: "Forstwirte", bildUrl: "forstwirt.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:98, t:"Regen ist flüssiger Sonnenschein"}, {l:"BÜROKRATIE-LEVEL", v:14, t:"Nur das Nötigste"}, {l:"TECHNIK-AFFINITÄT", v:64, t:"Motorsägenchirurg"}, {l:"KALORIENVERBRAUCH", v:96, t:"Mischung aus Schwarzenegger & Usain Bolt"}, {l:"PUBLIKUMSVERKEHR", v:19, t:"Meist nur Pilzsammler"}], special: "Kettenwechsel im Blindflug" },
     { titel: "Forstamtsleitung", bildUrl: "leiter.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:26, t:"Dienstfahrt zu Beratungen"}, {l:"BÜROKRATIE-LEVEL", v:94, t:"Unterschriften-Marathon"}, {l:"TECHNIK-AFFINITÄT", v:49, t:"Hofft auf Videokonferenz ohne Echo"}, {l:"KALORIENVERBRAUCH", v:39, t:"Tennisarm vom Telefonieren"}, {l:"PUBLIKUMSVERKEHR", v:89, t:"Krisenmanagement & Grußworte"}], special: "Diplomatisches Schweigen" },
     { titel: "Revierleitung", bildUrl: "foerster.jpg", stats: [{l:"OUTDOOR-ANTEIL", v:87, t:"Revierrunden"}, {l:"BÜROKRATIE-LEVEL", v:61, t:"Wer schreibt, der bleibt"}, {l:"TECHNIK-AFFINITÄT", v:76, t:"Reviertablet-Profi"}, {l:"KALORIENVERBRAUCH", v:74, t:"Kilometerfresser im Revier"}, {l:"PUBLIKUMSVERKEHR", v:81, t:"Brennholzkunden bespaßen"}], special: "Baumschätzung auf 2 cm genau" },
@@ -312,7 +318,7 @@ const mitarbeiterDaten = [
     { titel: "Aus-, Fort- und Weiterbildung", bildUrl: "bildung.jpg", stats: [{l: "OUTDOOR-ANTEIL", v: 43, t: "Zwischen Auswahlgesprächen und Ausbildungsmessen"}, {l: "BÜROKRATIE-LEVEL", v: 84, t: "Bewerbungsstapel"}, {l: "TECHNIK-AFFINITÄT", v: 77, t: "E-Learning & VR-Simulatoren"}, {l: "KALORIENVERBRAUCH", v: 48, t: "Moderationskoffer schleppen"}, {l: "PUBLIKUMSVERKEHR", v: 96, t: "Dauer-Networking mit Dozenten"}], special: "Wissen ist die beste Schutzausrüstung" }
 ];
 
-    const gegnerListe = ["HOLZDIEB", "BORKENKÄFER", "WANDERER", "MÜLLSÜNDER", "RADFAHRER", "JOGGER", "BRENNHOLZWERBER", "Jagdpächter"];
+    const gegnerListe = ["DER HOLZDIEB", "DER BORKENKÄFER", "DER WANDERER", "DER MÜLLSÜNDER", "DER RADFAHRER", "JOGGER", "BRENNHOLZWERBER", "Jagdpächter"];
     let playerDeck = [], cpuDeck = [], canPlay = true, aktuellerGegner = "";
 
     function startGame() {
@@ -327,13 +333,14 @@ const mitarbeiterDaten = [
         cards.sort(() => Math.random() - 0.5);
         playerDeck = cards.slice(0, Math.floor(cards.length / 2));
         cpuDeck = cards.slice(Math.floor(cards.length / 2));
-        neuerGegner();
+        
+
+        neuerGegner(); 
         render();
     }
 
     function neuerGegner() {
         aktuellerGegner = gegnerListe[Math.floor(Math.random() * gegnerListe.length)];
-        document.getElementById('opponent-name').textContent = aktuellerGegner;
     }
 
     function createCardHTML(data, isCpuHidden, filterIndex = null) {
@@ -409,7 +416,7 @@ const mitarbeiterDaten = [
             cpuDeck.push(cpuDeck.shift());
         }
 
-        lucide.createIcons(); // Icons in neu gerenderten Karten aktivieren
+        lucide.createIcons();
         document.getElementById('next-btn').style.display = "block";
         updateCounts();
     }
@@ -417,12 +424,15 @@ const mitarbeiterDaten = [
     function nextRound() {
         if (playerDeck.length === 0 || cpuDeck.length === 0) {
             alert(playerDeck.length === 0 ? "Game Over!" : "Gewonnen!");
-            location.reload(); return;
+            location.reload(); 
+            return;
         }
         canPlay = true;
         document.getElementById('next-btn').style.display = "none";
         document.getElementById('message').textContent = "Wähle einen Wert...";
-        neuerGegner();
+        
+        // HIER WAR DER FEHLER: neuerGegner() wurde entfernt.
+        
         render();
     }
 
@@ -437,9 +447,12 @@ const mitarbeiterDaten = [
     }
 
     function render() {
+        // Name im Header aktualisieren
+        document.getElementById('opponent-name').textContent = aktuellerGegner;
+        
         document.getElementById('player-card-container').innerHTML = createCardHTML(playerDeck[0], false);
         document.getElementById('cpu-card-container').innerHTML = createCardHTML(null, true);
-        lucide.createIcons(); // Initialisiert die Icons
+        lucide.createIcons();
         updateCounts();
     }
 </script>
